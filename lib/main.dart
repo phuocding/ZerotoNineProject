@@ -1,111 +1,94 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 
 void main() => runApp(MyApp());
+
+final dummySnapshots = [
+  {"name": "Tùng", "votes": 20},
+  {"name": "Phước", "votes": 23},
+  {"name": "Anh Duy", "votes": 24},
+  {"name": "Ngọc", "votes": 23},
+  {"name": "Anh Lôi", "votes": 27},
+  {"name": "Chị Đại", "votes": 31},
+  {"name": "Đại Ka", "votes": 33},
+  {"name": "Anh Quốc Anh", "votes": 33},
+  {"name": "Anh Tít", "votes": 28},
+  {"name": "Anh Hoan", "votes": 28},
+];
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Startup Name Generator',
-      theme: new ThemeData(
-        primaryColor: Colors.amberAccent,
-      ),
-      home: RandomWords(),
+      title: 'Free Code School',
+      home: MyHomePage(),
     );
   }
 }
 
-class RandomWordsState extends State<RandomWords> {
-  final List<WordPair> _suggestions = <WordPair>[];
-  final Set<WordPair> _saved = new Set<WordPair>();
-  final TextStyle _biggerFont = const TextStyle(fontSize: 18.0);
+ class MyHomePage extends StatefulWidget {
+   @override
+   _MyHomePageState createState() {
+     return _MyHomePageState();
+   }
+ }
 
-  Widget _buildSuggestions() {
-    return ListView.builder(
-        padding: const EdgeInsets.all(16.0),
-        itemBuilder: (context, i) {
-          // Add a one-pixel-high divider widget before each row in theListView.
-          if (i.isOdd) return Divider();
+ class _MyHomePageState extends State<MyHomePage> {
+   @override
+   Widget build(BuildContext context) {
+     return Scaffold(
+       appBar: AppBar(title: Text('Team Votes')),
+       body: _buildBody(context),
+     );
+   }
+ }
 
-          final index = i ~/ 2;
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateWordPairs().take(10));
-          }
-          return _buildRow(_suggestions[index]);
-        });
-  }
+ Widget _buildBody(BuildContext context) {
+   // TODO: get actual snapshot from Cloud Firestore
+   return _buildList(context, dummySnapshots);
+ }
 
-  Widget _buildRow(WordPair pair) {
-    final bool alreadySaved = _saved.contains(pair);
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
-      trailing: new Icon(
-        alreadySaved ? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved ? Colors.red : null,
-      ),
-      onTap: () {
-        setState(() {
-          if (alreadySaved) {
-            _saved.remove(pair);
-          } else {
-            _saved.add(pair);
-          }
-        });
-      },
-    );
-  }
+ Widget _buildList(BuildContext context, List<Map> snapshot) {
+   return ListView(
+     padding: const EdgeInsets.only(top: 20.0),
+     children: snapshot.map((data) => _buildListItem(context, data)).toList(),
+   );
+ }
 
-  void _pushSaved() {
-  Navigator.of(context).push(
-    new MaterialPageRoute<void>(   // Add 20 lines from here...
-      builder: (BuildContext context) {
-        final Iterable<ListTile> tiles = _saved.map(
-          (WordPair pair) {
-            return new ListTile(
-              title: new Text(
-                pair.asPascalCase,
-                style: _biggerFont,
-              ),
-            );
-          },
-        );
-        final List<Widget> divided = ListTile
-          .divideTiles(
-            context: context,
-            tiles: tiles,
-          )
-          .toList();
+ Widget _buildListItem(BuildContext context, Map data) {
+   final record = Record.fromMap(data);
 
-          return new Scaffold(         // Add 6 lines from here...
-          appBar: new AppBar(
-            title: const Text('Saved Suggestions'),
-          ),
-          body: new ListView(children: divided),
-        );
-      },
-    ),
-  );
-}
+   return Padding(
+     key: ValueKey(record.name),
+     padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+     child: Container(
+       decoration: BoxDecoration(
+         border: Border.all(color: Colors.blueGrey),
+         borderRadius: BorderRadius.circular(5.0),
+       ),
+       child: ListTile(
+         title: Text(record.name),
+         trailing: Text(record.votes.toString()),
+         onTap: () => print(record),
+       ),
+     ),
+   );
+ }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Startup Name Generator'),
-        actions: <Widget>[
-          new IconButton(icon: const Icon(Icons.list), onPressed: _pushSaved,)
-        ],
-      ),
-      body: _buildSuggestions(),
-    );
-  }
-}
+ class Record {
+   final String name;
+   final int votes;
+   final DocumentReference reference;
 
-class RandomWords extends StatefulWidget {
-  @override
-  RandomWordsState createState() => new RandomWordsState();
-}
+   Record.fromMap(Map<String, dynamic> map, {this.reference})
+   : assert(map['name'] != null),
+   assert(map['votes'] != null),
+   name = map['name'],
+   votes = map['votes'];
+
+   Record.fromSnapshot(DocumentSnapshot snapshot)
+   :this.fromMap(snapshot.data, reference: snapshot.reference);
+
+   @override
+   String toString() => "Record<$name:$votes>";
+ }
