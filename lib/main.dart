@@ -19,7 +19,7 @@ class MyApp extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Text(
-                    'Free Code School',
+                    'Gratis Code School',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                     ),
@@ -92,23 +92,41 @@ class MyApp extends StatelessWidget {
         10. “The meaning of life is to find your gift. The purpose of life is to give it away.” ―Pablo Picasso.
         ''',
         softWrap: true,
+        style: TextStyle(fontFamily: 'SansForgetica'),
       ),
     );
 
     return MaterialApp(
-      title: 'Free Code School',
+      title: 'Gratis Code School',
       theme: ThemeData(
         // primarySwatch: Colors.amber,
         primaryColor: Colors.lightBlueAccent[100],
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('FREE { } SCHOOL', style: TextStyle(color: Colors.red)),
+          leading: IconButton(
+            icon: Icon(Icons.menu),
+            onPressed: () {},
+          ),
+          title: Text(
+          '{\'GRATIS School\'}',
+           style: TextStyle(color: Colors.red, fontFamily: 'BeynoTtf'),
+           ),
+           actions: <Widget>[
+             IconButton(
+               icon: Icon(Icons.shopping_cart),
+               onPressed: () {},
+             ),
+             IconButton(
+               icon: Icon(Icons.monetization_on),
+               onPressed: () {},
+             ),
+           ],
         ),
         body: ListView(
           children: <Widget>[
             Image.asset(
-              'images/code.jpg',
+              'assets/code.jpg',
               width: 600.0,
               height: 240.0,
               fit: BoxFit.cover,
@@ -130,7 +148,7 @@ class FavoriteWidget extends StatefulWidget {
 
 class _FavoriteWidgetState extends State<FavoriteWidget> {
   bool _isFavorited = false;
-  int _favoriteCount = 12999;
+  int _favoriteCount = 149;
 
   void _toggleFavorite() {
     setState(() {

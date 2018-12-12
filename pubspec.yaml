@@ -31,8 +31,17 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-    - images/lake.jpg
-    - images/code.jpg
+    - assets/
+  fonts:
+    - family: SansForgetica
+      fonts:
+        - asset: fonts/SansForgetica-Regular.otf
+    - family: Prometheus
+      fonts:
+        - asset: fonts/Prometheus.ttf
+    - family: BeynoTtf
+      fonts:
+        - asset: fonts/Beyno.ttf
 
 flutter_icons:
   android: true
