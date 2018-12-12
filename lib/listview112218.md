@@ -1,6 +1,6 @@
 # Docs List View in Team
 
-![alt text](https://github.com/phuocding/ZerotoNineProject/blob/master/assets/home.PNG "Home Page")
+![alt text](https://github.com/phuocding/ZerotoNineProject/blob/old-team-votes-app/assets/home.PNG "Home Page")
 
 - You can [access this link to follow tutorial](https://codelabs.developers.google.com/codelabs/flutter-firebase) or-hoặc hiểu nôm na cái project demo này như này
 
