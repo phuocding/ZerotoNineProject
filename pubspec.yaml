@@ -30,8 +30,11 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - images/lake.jpg
+    - images/code.jpg
 
 flutter_icons:
   android: true
   ios: true
-  image_path: "./assets/icon2.png"
+  image_path: "./assets/icon_res_512.png"
